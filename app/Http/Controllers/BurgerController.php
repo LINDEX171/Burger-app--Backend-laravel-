@@ -25,18 +25,24 @@ class BurgerController extends Controller
     }
 
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         try {
             $burger = new Burger();
             $burger->name = $request->input('name');
             $burger->price = $request->input('price');
-            $burger->image = $request->input('image');
             $burger->description = $request->input('description');
             $burger->is_active = $request->input('is_active', true); // Default true if not provided
-
+    
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $imageName); // Enregistrer l'image dans le répertoire public/images
+                $burger->image = 'images/' . $imageName;
+            }
+    
             $burger->save();
-
+    
             return response()->json([
                 'status_code' => 201,
                 'status_message' => 'Burger ajouté avec succès',
@@ -50,6 +56,7 @@ class BurgerController extends Controller
             ], 500);
         }
     }
+    
 
 
     
