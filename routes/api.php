@@ -27,7 +27,6 @@ Route::put('burgers/{id}', [BurgerController::class, 'update']);
 Route::delete('burgers/{id}', [BurgerController::class, 'archive']);
 Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
-Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('updateuser/{id}', [\App\Http\Controllers\AuthController::class, 'update']);
 Route::post('sendEmail', [\App\Http\Controllers\EmailController::class, 'sendEmail'])->name('sendEmail');
 
@@ -63,5 +62,8 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'user']);
-    Route::post('logout', [AuthController::class, 'logout']);
+   // Route::post('logout', [AuthController::class, 'logout']);
+   Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 });
+
+

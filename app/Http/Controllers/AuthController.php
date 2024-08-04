@@ -7,17 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
-
-    public function userDetails(Request $request)
-{
-    return response()->json($request->user());
-}
-
-
     public function register(Request $request)
 {
     try {
@@ -51,13 +43,13 @@ class AuthController extends Controller
         ]);
 
         // Création d'un jeton d'authentification pour l'utilisateur
-        //$token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         // Retour de la réponse JSON avec le jeton
         return response()->json([
             'status_code' => 201,
             'status_message' => 'Utilisateur créé avec succès',
-           // 'access_token' => $token,
+            'access_token' => $token,
             'token_type' => 'Bearer'
         ]);
 
@@ -100,7 +92,6 @@ public function login(Request $request)
         // Récupération de l'utilisateur et génération du jeton
         $user = User::where('email', $request->email)->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
-        $cookie = cookie('jwt', $token, 600000 * 24); 
 
         // Retour de la réponse JSON avec le jeton
         return response()->json([
@@ -108,10 +99,7 @@ public function login(Request $request)
             'status_message' => 'Connexion réussie',
             'access_token' => $token,
             'token_type' => 'Bearer'
-        ])->withCookie($cookie);
-
-
-        
+        ]);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
         // Gestion des erreurs de validation
@@ -129,19 +117,39 @@ public function login(Request $request)
             'error_message' => $e->getMessage()
         ], 500);
     }
-
 }
 
 public function user(){
     return Auth::user();
 }
 
-public function logout()
+
+
+public function logout(Request $request)
 {
- $cookie = Cookie::forget('jwt');
- return response([
-    'message' => 'Success'
- ])->withCookie($cookie);
+    try {
+        // Révocation de tous les jetons d'authentification de l'utilisateur actuel
+        $request->user()->tokens()->delete();
+
+        // Retour de la réponse JSON avec un message de succès
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Déconnexion réussie'
+        ]);
+
+    } catch (\Exception $e) {
+        // Gestion des autres erreurs
+        return response()->json([
+            'status_code' => 500,
+            'status_message' => 'Une erreur est survenue lors de la déconnexion',
+            'error_message' => $e->getMessage()
+        ], 500);
+    }
 }
 
+
+
+   
+
 }
+
