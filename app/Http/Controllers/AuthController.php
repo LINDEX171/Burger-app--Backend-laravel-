@@ -88,18 +88,18 @@ public function login(Request $request)
                 'status_message' => 'Détails de connexion invalides'
             ], 401);
         }
-
+        
         // Récupération de l'utilisateur et génération du jeton
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
+        $cookie = cookie('jwt', $token, 600000 * 24);
 
         // Retour de la réponse JSON avec le jeton
-        return response()->json([
-            'status_code' => 200,
-            'status_message' => 'Connexion réussie',
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+        return response([
+            'message'=>'success',
+            'token'=>$token,
+            'user'=>$user,
+        ])->withCookie($cookie);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
         // Gestion des erreurs de validation

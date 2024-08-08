@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CommandeConfirmationMail;
 use App\Models\Burger;
 use App\Models\Commande;
+use App\Models\Commande1;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class CommandeController extends Controller
@@ -95,6 +98,7 @@ class CommandeController extends Controller
         return response()->json(null, 204);
     }
 
+    
     
 
 }
