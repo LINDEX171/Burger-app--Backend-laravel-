@@ -12,7 +12,7 @@ Key Features
 Dynamic Menu: Explore a list of burgers with descriptions and customizable options 👤.
 Streamlined Ordering Process: Optimized user experience powered by Angular and Laravel.
 
-![Image](https://github.com/user-attachments/assets/cdd87ad4-7421-47a9-ba90-e58efefdcc5b)
+
 
 ![Image](https://github.com/user-attachments/assets/dcf55222-e4c8-40fa-b700-14f18a9def48)
 
