@@ -10,6 +10,7 @@ Secure access that enables the management of burgers, orders, and users, ensurin
 
 Key Features
 Dynamic Menu: Explore a list of burgers with descriptions and customizable options 👤.
+
 Streamlined Ordering Process: Optimized user experience powered by Angular and Laravel.
 
 
